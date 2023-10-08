@@ -28,17 +28,12 @@ export default class User {
             username: this.username,
             password: this.password,
             deleted: this.deleted ? this.deleted : 0,
-            created_at: this.created_at ? this.created_at : this.now()
+            created_at: this.created_at ? this.created_at : this.db.now()
         })  
         return 'User created succesfully!';
     }
     return 'Error occured!';
     }
-    
-    // other methods
-    private now = () =>
-    {
-        return Math.floor(new Date().getTime() / 1000);
-    }
+
         
 }

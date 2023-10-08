@@ -3,6 +3,7 @@ import { mc } from '..';
 export default({
     methods: {
        insert_record,
+       now,
     }
 });
 
@@ -23,3 +24,9 @@ async function insert_record(table: string,data: object) {
     } 
     return status;
   }
+
+// other methods
+function now()
+{
+    return Math.floor(new Date().getTime() / 1000);
+}

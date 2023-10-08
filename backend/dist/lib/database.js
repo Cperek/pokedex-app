@@ -13,6 +13,7 @@ const __1 = require("..");
 exports.default = ({
     methods: {
         insert_record,
+        now,
     }
 });
 //db functions
@@ -33,4 +34,8 @@ function insert_record(table, data) {
         }
         return status;
     });
+}
+// other methods
+function now() {
+    return Math.floor(new Date().getTime() / 1000);
 }
