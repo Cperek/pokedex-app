@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const index_1 = require("./index");
+const __1 = require("..");
 exports.default = ({
     methods: {
         insert_record,
@@ -20,7 +20,7 @@ function insert_record(table, data) {
     return __awaiter(this, void 0, void 0, function* () {
         var status;
         try {
-            const db = index_1.mc.db();
+            const db = __1.mc.db();
             const collection = db.collection(table);
             yield collection.insertOne(data);
             status = "Record added to the database";
@@ -29,7 +29,7 @@ function insert_record(table, data) {
             status = error;
         }
         finally {
-            yield index_1.mc.close();
+            yield __1.mc.close();
         }
         return status;
     });

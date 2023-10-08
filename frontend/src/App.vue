@@ -24,7 +24,7 @@ import Navbar from '@/components/Navbar.vue'
 }
 .container
 {
-  margin-top: 80px;
+  margin-top: 35px;
 }
 .v-container
 {
