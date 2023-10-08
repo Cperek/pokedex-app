@@ -1,5 +1,7 @@
 
 <template>
+  <v-layout column flex class="justify-center pb-4">
+  <v-flex sm-6 offset-sm-3>
   <div class="Login" >
     
     <v-card
@@ -8,7 +10,7 @@
       max-width="650"
       rounded="lg"
     >
-      <v-card-title class="h1 mb-3">Login</v-card-title>
+      <v-card-title class="h1 mb-3">Sign In</v-card-title>
 
       <v-text-field 
       class="mb-3"
@@ -19,7 +21,7 @@
       variant="underlined"
       density="compact"
       hint="Set your username to log in with"
-      prepend-inner-icon="mdi-email-outline"
+      prepend-inner-icon="mdi-account"
       >
       </v-text-field>
 
@@ -39,14 +41,16 @@
 
       <br>
 
-      <v-btn block class="mb-8" color="teal-darken-1" size="large" variant="tonal" @click="login">Login</v-btn>
+      <v-btn block class="mb-8" color="amber-accent-3" size="large" variant="outlined" @click="login">Login</v-btn>
     
       <v-card-text class="text-center">
         <router-link to="/register">Not having account yet? Register<v-icon icon="mdi-chevron-right"></v-icon></router-link>        
       </v-card-text>
       
     </v-card>
-  </div>
+    </div>
+    </v-flex>
+  </v-layout> 
 </template>
 
 
@@ -75,7 +79,11 @@ export default{
 <style scoped>
 .h1{
   width: 270px!important;
-  font-size: 34px!important;
-  text-align: center;
+  font-size: 28px!important;
+  text-align: left;
+  padding-left: 1.2rem;
+  border-left: 6px solid rgb(255, 196, 0);
+  border-radius: 2px;
+  margin-bottom: 2rem!important;
 }
 </style>
