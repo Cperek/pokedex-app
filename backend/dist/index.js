@@ -20,6 +20,19 @@ app.get('/', (req, res) => {
         message: 'Express + TypeScript Server'
     });
 });
+app.post('/register', (req, res) => {
+    res.send({
+        username: `${req.body.username}`,
+        password: `${req.body.password}`,
+        repassword: `${req.body.repassword}`,
+    });
+});
+app.post('/login', (req, res) => {
+    res.send({
+        username: `${req.body.username}`,
+        password: `${req.body.password}`,
+    });
+});
 app.listen(port, () => {
     console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
 });
