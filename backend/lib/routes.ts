@@ -1,25 +1,20 @@
 import express, { Express, Request, Response } from 'express';
-import User from '../models/User';
+import UserController from './controllers/UserController';
 
 module.exports = (app :Express) => {
   
     app.post('/register', (req: Request, res: Response) => {
     
-        const result = new User(
-        undefined,
-        `${req.body.username}`,
-        `${req.body.password}`,
-        `${req.body.repassword}`  
-        ).create();
-
-        
+        const controller = new UserController();
+        const result = controller.validate_and_register_user(req.body);
+  
         res.send(
           {
             result: result
           }
         );
 
-      });
+    });
     
     app.post('/login', (req: Request, res: Response) => {
       res.send(

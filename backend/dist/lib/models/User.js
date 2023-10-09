@@ -9,26 +9,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.now = exports.insert_record = void 0;
-const __1 = require("..");
-function insert_record(table, data) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const db = __1.mc.db();
-            const collection = db.collection(table);
-            yield collection.insertOne(data);
-            return "Record added to the database";
-        }
-        catch (error) {
-            throw error;
-        }
-        finally {
-            yield __1.mc.close();
-        }
-    });
+const database_1 = require("../database");
+class User {
+    constructor() {
+        this.table = "users";
+        this.create = () => __awaiter(this, void 0, void 0, function* () {
+            const result = yield (0, database_1.insert_record)(this.table, {
+                username: this.username,
+                password: this.password,
+                deleted: this.deleted ? this.deleted : 0,
+                created_at: this.created_at ? this.created_at : (0, database_1.now)()
+            });
+            return 'User created successfully!';
+        });
+    }
 }
-exports.insert_record = insert_record;
-function now() {
-    return Math.floor(new Date().getTime() / 1000);
-}
-exports.now = now;
+exports.default = User;

@@ -3,10 +3,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const User_1 = __importDefault(require("../models/User"));
+const UserController_1 = __importDefault(require("./controllers/UserController"));
 module.exports = (app) => {
     app.post('/register', (req, res) => {
-        const result = new User_1.default(undefined, `${req.body.username}`, `${req.body.password}`, `${req.body.repassword}`).create();
+        const controller = new UserController_1.default();
+        const result = controller.validate_and_register_user(req.body);
         res.send({
             result: result
         });
