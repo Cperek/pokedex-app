@@ -17,20 +17,27 @@ class UserController {
     constructor() {
         this.user = new User_1.default();
     }
-    validate_and_register_user(userData) {
+    validate_and_register_user(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            const userData = req.body;
             // Validate user data
             if (!userData.username || !userData.password || !userData.repassword) {
-                return 'Invalid user data';
+                res.status(403).send({
+                    error: "All input fields are requiered!"
+                });
             }
             this.user.username = userData.username;
             this.user.password = userData.password;
             try {
-                const result = yield this.user.create();
-                return result;
+                yield this.user.create().then();
+                {
+                    res.send(JSON.stringify(this.user));
+                }
             }
             catch (error) {
-                return 'Error occurred during user registration';
+                // res.status(500).send({
+                //     error: "Error occured while adding account to database"
+                // });
             }
         });
     }

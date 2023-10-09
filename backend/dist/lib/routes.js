@@ -7,10 +7,7 @@ const UserController_1 = __importDefault(require("./controllers/UserController")
 module.exports = (app) => {
     app.post('/register', (req, res) => {
         const controller = new UserController_1.default();
-        const result = controller.validate_and_register_user(req.body);
-        res.send({
-            result: result
-        });
+        controller.validate_and_register_user(req, res);
     });
     app.post('/login', (req, res) => {
         res.send({

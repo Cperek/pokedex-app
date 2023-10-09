@@ -1,9 +1,10 @@
 import { ObjectId } from "mongodb";
 import { insert_record, now } from '../database';
 
+const table = "users";
 export default class User {
 
-    private table = "users";
+   
     public id?: ObjectId;
     public username?: string;
     public password?: string;
@@ -15,15 +16,14 @@ export default class User {
 
     constructor() {}
 
-    create = async (): Promise<string> => {  
+    create = async () => {  
 
-        const result = await insert_record(this.table, {
+         await insert_record(table, {
             username: this.username,
             password: this.password,
             deleted: this.deleted ? this.deleted : 0,
             created_at: this.created_at ? this.created_at : now()
-        });
-
-        return 'User created successfully!';    
+        })
+  
     }
 }

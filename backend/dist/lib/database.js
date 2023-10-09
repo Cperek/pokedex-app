@@ -17,7 +17,7 @@ function insert_record(table, data) {
             const db = __1.mc.db();
             const collection = db.collection(table);
             yield collection.insertOne(data);
-            return "Record added to the database";
+            return true;
         }
         catch (error) {
             throw error;

@@ -10,17 +10,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = require("../database");
+const table = "users";
 class User {
     constructor() {
-        this.table = "users";
         this.create = () => __awaiter(this, void 0, void 0, function* () {
-            const result = yield (0, database_1.insert_record)(this.table, {
+            yield (0, database_1.insert_record)(table, {
                 username: this.username,
                 password: this.password,
                 deleted: this.deleted ? this.deleted : 0,
                 created_at: this.created_at ? this.created_at : (0, database_1.now)()
             });
-            return 'User created successfully!';
         });
     }
 }

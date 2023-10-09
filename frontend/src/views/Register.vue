@@ -64,11 +64,13 @@
       </div>
       </v-flex>
   </v-layout>
+  <v-alert closable :text="alert_error" type="error" class="sm-2"></v-alert>
 </template>
 
 
 <script lang="ts">
 import UserAuthentication from '@/services/UserAuthentication'
+import { AxiosError } from 'axios';
 export default{
   data() {
     return {
@@ -77,16 +79,23 @@ export default{
       repassword: '',
       visible_pass: false,
       visible_repass: false,
+      alert_error: '',
     }
   },
   methods: {
-    async register (){
-    const response = await UserAuthentication.methods.register({
-        username: this.username,
-        password: this.password,
-        repassword: this.repassword
-    })
-    console.log(response.data);
+      async register (){
+        try{
+          const response = await UserAuthentication.methods.register({
+          username: this.username,
+          password: this.password,
+          repassword: this.repassword
+          })
+        }catch(error)
+        {
+          if (error instanceof AxiosError) {
+            this.alert_error = error.response?.data.error;
+          }
+      }  
     }
   }
 }

@@ -3,12 +3,12 @@ import { mc } from '..';
 
 
 
-export async function insert_record(table: string, data: object): Promise<string> {
+export async function insert_record(table: string, data: object): Promise<any> {
   try {
       const db = mc.db();
       const collection = db.collection(table);
       await collection.insertOne(data);
-      return "Record added to the database";
+      return true;
   } catch (error) {
       throw error;
   } finally {
