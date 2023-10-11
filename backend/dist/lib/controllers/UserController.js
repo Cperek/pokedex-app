@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const User_1 = __importDefault(require("../models/User"));
+const database_1 = require("../database");
 class UserController {
     constructor() {
         this.user = new User_1.default();
@@ -27,19 +28,37 @@ class UserController {
                 });
                 return;
             }
-            this.user.username = userData.username;
-            this.user.password = userData.password;
-            try {
-                yield this.user.create();
-                {
-                    res.send(JSON.stringify(this.user));
-                }
-            }
-            catch (err) {
-                console.error(err);
-                res.status(500).send({
-                    error: "Database connection failed!"
+            if (userData.password !== userData.repassword) {
+                res.status(403).send({
+                    error: "Passwords don't match"
                 });
+                return;
+            }
+            const userExist = yield (0, database_1.get_record)('users', //table
+            { username: userData.username, deleted: 0 }, //where
+            { _id: 0, username: 1 }) //select
+                .then();
+            {
+                if (userExist !== null) {
+                    res.status(403).send({
+                        error: "Account already exists!"
+                    });
+                    return;
+                }
+                //Setting data for User.ts
+                this.user.username = userData.username;
+                this.user.password = userData.password;
+                try {
+                    yield this.user.create().then();
+                    {
+                        res.send(JSON.stringify(this.user));
+                    }
+                }
+                catch (err) {
+                    res.status(500).send({
+                        error: "Database connection failed!"
+                    });
+                }
             }
         });
     }

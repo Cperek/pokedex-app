@@ -63,6 +63,9 @@
         </v-card>
       </div>
       </v-flex>
+
+      <transition>
+      <div v-if="alertShow">
       <v-alert 
         closable
         :text="alertText"
@@ -72,6 +75,9 @@
         class="sm-2 alert_left"
         >
         </v-alert>
+        </div>
+      </transition>
+
   </v-layout>
 </template>
 
@@ -112,6 +118,12 @@ export default{
             this.alertShow = true;
           }
         }
+        finally
+        {
+          setTimeout(() => {
+          this.alertShow = false;
+          }, 4000);
+        }
     }
   }
 }
@@ -133,6 +145,19 @@ export default{
   position: absolute;
   right: 0;
   bottom: 0;
+}
+
+.v-leave-active {
+  transition: opacity 2s ease-out;
+}
+
+.v-enter-active {
+  transition: opacity 0.5s ease-in;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }
 
 </style>

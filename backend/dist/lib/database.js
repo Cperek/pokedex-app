@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.now = exports.insert_record = void 0;
+exports.now = exports.get_record = exports.insert_record = void 0;
 const __1 = require("..");
 const mongodb_1 = require("mongodb");
 function Connect() {
@@ -30,6 +30,26 @@ function insert_record(table, data) {
     });
 }
 exports.insert_record = insert_record;
+function get_record(table, where, select) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let mc = Connect();
+        var result = null;
+        try {
+            const db = mc.db(__1.database);
+            const collection = db.collection(table);
+            result = yield collection.findOne(where, {
+                projection: select,
+            });
+        }
+        finally {
+            yield mc.close().then();
+            {
+                return result;
+            }
+        }
+    });
+}
+exports.get_record = get_record;
 function now() {
     return Math.floor(new Date().getTime() / 1000);
 }
