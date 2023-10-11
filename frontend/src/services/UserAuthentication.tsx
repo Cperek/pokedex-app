@@ -2,9 +2,9 @@ import Api from '@/services/Api'
 
 export default{
     methods: {
-    async register (userdata: object)
+    register (userdata: object)
     {
-        return await Api().post('register',userdata);
+        return Api().post('register',userdata);
     },
     login (userdata: object)
     {

@@ -1,17 +1,24 @@
 
-import { mc } from '..';
+import { uri , database } from '..';
+import { MongoClient } from 'mongodb';
 
 
+function Connect()
+{
+  const mc = new MongoClient(uri);
+  return mc;
+}
 
 export async function insert_record(table: string, data: object): Promise<any> {
+
+  let mc = Connect();
+
   try {
-      const db = mc.db();
+      const db = mc.db(database);
       const collection = db.collection(table);
-      await collection.insertOne(data);
-      return true;
-  } catch (error) {
-      throw error;
-  } finally {
+      const result = await collection.insertOne(data);
+  } 
+  finally {
       await mc.close();
   }
 }

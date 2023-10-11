@@ -25,12 +25,21 @@ class UserController {
                 res.status(403).send({
                     error: "All input fields are requiered!"
                 });
+                return;
             }
             this.user.username = userData.username;
             this.user.password = userData.password;
-            yield this.user.create().then();
-            {
-                res.send(JSON.stringify(this.user));
+            try {
+                yield this.user.create();
+                {
+                    res.send(JSON.stringify(this.user));
+                }
+            }
+            catch (err) {
+                console.error(err);
+                res.status(500).send({
+                    error: "Database connection failed!"
+                });
             }
         });
     }

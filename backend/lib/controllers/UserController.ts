@@ -20,16 +20,25 @@ export default class UserController {
             res.status(403).send({
                 error: "All input fields are requiered!"
             });
+            return;
         }
 
         this.user.username = userData.username;
         this.user.password = userData.password;
         
-       
-        await this.user.create().then()
+        try{
+            await this.user.create()
+            {
+                res.send(JSON.stringify(this.user))
+            }  
+        } catch(err)
         {
-            res.send(JSON.stringify(this.user))
-        }   
+            console.error(err);
+            res.status(500).send({
+                error: "Database connection failed!"
+            });
+        }
+     
     }
 }
 

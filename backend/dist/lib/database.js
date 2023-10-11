@@ -11,19 +11,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.now = exports.insert_record = void 0;
 const __1 = require("..");
+const mongodb_1 = require("mongodb");
+function Connect() {
+    const mc = new mongodb_1.MongoClient(__1.uri);
+    return mc;
+}
 function insert_record(table, data) {
     return __awaiter(this, void 0, void 0, function* () {
+        let mc = Connect();
         try {
-            const db = __1.mc.db();
+            const db = mc.db(__1.database);
             const collection = db.collection(table);
-            yield collection.insertOne(data);
-            return true;
-        }
-        catch (error) {
-            throw error;
+            const result = yield collection.insertOne(data);
         }
         finally {
-            yield __1.mc.close();
+            yield mc.close();
         }
     });
 }

@@ -2,7 +2,6 @@ import express, {Express} from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
-import { MongoClient } from 'mongodb';
 import { table } from 'console';
 
 
@@ -10,11 +9,12 @@ import { table } from 'console';
 require('dotenv').config()
 const config = process.env;
 const uri = config.MONGO_DB_URI ? config.MONGO_DB_URI : '';
+const database = config.DB_NAME ? config.DB_NAME : '';
 const port = config.PORT;
 
-//get MongoCilent and export it for database.ts usage
-const mc = new MongoClient(uri);
-export { mc };
+
+
+export { uri, database };
 
 
 

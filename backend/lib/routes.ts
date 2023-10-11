@@ -3,10 +3,10 @@ import UserController from './controllers/UserController';
 
 module.exports = (app :Express) => {
   
-    app.post('/register', (req: Request, res: Response) => {
+    app.post('/register', async (req: Request, res: Response) => {
     
         const controller = new UserController();
-        controller.validate_and_register_user(req,res);
+        await controller.validate_and_register_user(req,res);
     });
     
     app.post('/login', (req: Request, res: Response) => {
