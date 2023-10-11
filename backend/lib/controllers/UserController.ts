@@ -26,19 +26,10 @@ export default class UserController {
         this.user.password = userData.password;
         
        
-        try {
-            await this.user.create().then()
-            {
-                res.send(JSON.stringify(this.user))
-            }   
-
-        } catch (error) {
-
-            // res.status(500).send({
-            //     error: "Error occured while adding account to database"
-            // });
-
-        }
+        await this.user.create().then()
+        {
+            res.send(JSON.stringify(this.user))
+        }   
     }
 }
 

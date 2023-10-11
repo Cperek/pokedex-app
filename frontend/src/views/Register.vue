@@ -63,13 +63,21 @@
         </v-card>
       </div>
       </v-flex>
+      <v-alert 
+        closable
+        :text="alertText"
+        v-model="alertShow"
+        :type="alertType ? 'success' : 'error'" 
+        variant="tonal" 
+        class="sm-2 alert_left"
+        >
+        </v-alert>
   </v-layout>
-  <v-alert closable :text="alert_error" type="error" class="sm-2"></v-alert>
 </template>
 
 
 <script lang="ts">
-import UserAuthentication from '@/services/UserAuthentication'
+import UserAuthentication from '@/services/UserAuthentication';
 import { AxiosError } from 'axios';
 export default{
   data() {
@@ -79,7 +87,9 @@ export default{
       repassword: '',
       visible_pass: false,
       visible_repass: false,
-      alert_error: '',
+      alertText: '',
+      alertShow: false,
+      alertType: true
     }
   },
   methods: {
@@ -90,12 +100,18 @@ export default{
           password: this.password,
           repassword: this.repassword
           })
+          this.alertText = "Account registered successfully"
+          this.alertType = true;
+          this.alertShow = true;
         }catch(error)
         {
           if (error instanceof AxiosError) {
-            this.alert_error = error.response?.data.error;
+            console.log("error");
+            this.alertText = error.response?.data.error;
+            this.alertType = false;
+            this.alertShow = true;
           }
-      }  
+        }
     }
   }
 }
@@ -111,4 +127,12 @@ export default{
   border-radius: 2px;
   margin-bottom: 2rem!important;
 }
+
+.alert_left
+{
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
 </style>

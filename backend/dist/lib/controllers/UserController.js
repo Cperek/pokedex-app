@@ -28,16 +28,9 @@ class UserController {
             }
             this.user.username = userData.username;
             this.user.password = userData.password;
-            try {
-                yield this.user.create().then();
-                {
-                    res.send(JSON.stringify(this.user));
-                }
-            }
-            catch (error) {
-                // res.status(500).send({
-                //     error: "Error occured while adding account to database"
-                // });
+            yield this.user.create().then();
+            {
+                res.send(JSON.stringify(this.user));
             }
         });
     }
