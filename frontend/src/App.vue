@@ -6,7 +6,7 @@ import Navbar from '@/components/Navbar.vue'
 <template>
   <v-app>
     <v-container fluid>
-    <Navbar />
+      <Navbar />
     <div class="container">
       <RouterView />
     </div>

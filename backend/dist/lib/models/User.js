@@ -8,18 +8,29 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = require("../database");
+const bcrypt_1 = __importDefault(require("bcrypt"));
 const table = "users";
+const saltRounds = 10;
 class User {
     constructor() {
         this.create = () => __awaiter(this, void 0, void 0, function* () {
-            yield (0, database_1.insert_record)(table, {
-                username: this.username,
-                password: this.password,
-                deleted: this.deleted ? this.deleted : 0,
-                created_at: this.created_at ? this.created_at : (0, database_1.now)()
-            });
+            if (typeof this.password === 'string') {
+                const hashedPassword = yield bcrypt_1.default.hash(this.password, saltRounds);
+                yield (0, database_1.insert_record)(table, {
+                    username: this.username,
+                    password: hashedPassword,
+                    deleted: this.deleted ? this.deleted : 0,
+                    created_at: this.created_at ? this.created_at : (0, database_1.now)()
+                });
+            }
+            else {
+                throw new Error("Password has to be string!");
+            }
         });
     }
 }

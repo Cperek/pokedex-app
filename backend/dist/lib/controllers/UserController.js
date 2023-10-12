@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const User_1 = __importDefault(require("../models/User"));
 const database_1 = require("../database");
+const joi_1 = __importDefault(require("joi"));
 class UserController {
     constructor() {
         this.user = new User_1.default();
@@ -31,6 +32,47 @@ class UserController {
             if (userData.password !== userData.repassword) {
                 res.status(403).send({
                     error: "Passwords don't match"
+                });
+                return;
+            }
+            const schema = joi_1.default.object({
+                username: joi_1.default.string()
+                    .alphanum()
+                    .min(3)
+                    .max(30)
+                    .required()
+                    .messages({
+                    'string.base': `The username should be a type of text`,
+                    'string.empty': `The username cannot be an empty field`,
+                    'string.min': `The username should have a minimum length of {#limit}`,
+                    'any.required': `The username is a required field`,
+                    'string.alphanum': `The must only contain alpha-numeric characters`,
+                }),
+                password: joi_1.default.string()
+                    .pattern(new RegExp('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$'))
+                    .min(8)
+                    .max(30)
+                    .required()
+                    .messages({
+                    'string.base': `The password should be a type of text`,
+                    'string.empty': `The password cannot be an empty field`,
+                    'string.min': `The password should have a minimum length of {#limit}`,
+                    'any.required': `The password is a required field`,
+                    'string.pattern.base': `A password have to contain at least eight characters,
+                    including at least one number and both lower and uppercase letters and one special characters`
+                })
+            });
+            try {
+                const validation = yield schema.validateAsync({ username: userData.username, password: userData.password });
+            }
+            catch (err) {
+                let message = 'Unknown Error';
+                if (joi_1.default.isError(err)) {
+                    console.log(err);
+                    message = err.message;
+                }
+                res.status(403).send({
+                    error: message
                 });
                 return;
             }

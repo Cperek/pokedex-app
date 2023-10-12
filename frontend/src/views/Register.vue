@@ -70,6 +70,7 @@
         closable
         :text="alertText"
         v-model="alertShow"
+        density="compact"
         :type="alertType ? 'success' : 'error'" 
         variant="tonal" 
         class="sm-2 alert_left"
@@ -95,11 +96,13 @@ export default{
       visible_repass: false,
       alertText: '',
       alertShow: false,
-      alertType: true
+      alertType: true,
+      Interval: 0
     }
   },
   methods: {
       async register (){
+       
         try{
           const response = await UserAuthentication.methods.register({
           username: this.username,
@@ -120,9 +123,10 @@ export default{
         }
         finally
         {
-          setTimeout(() => {
+          clearInterval(this.Interval);
+          this.Interval = setInterval(() => {
           this.alertShow = false;
-          }, 4000);
+          }, 5000);
         }
     }
   }
@@ -145,6 +149,7 @@ export default{
   position: absolute;
   right: 0;
   bottom: 0;
+  max-width: 30%;
 }
 
 .v-leave-active {

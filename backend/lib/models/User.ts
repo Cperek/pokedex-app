@@ -1,7 +1,10 @@
 import { ObjectId } from "mongodb";
 import { insert_record, now } from '../database';
+import bcrypt from "bcrypt";
+import { string } from "joi";
 
 const table = "users";
+const saltRounds = 10;
 export default class User {
 
    
@@ -19,11 +22,21 @@ export default class User {
 
     create = async () => {  
 
-         await insert_record(table, {
+        if(typeof this.password === 'string')
+        {
+
+        const hashedPassword = await bcrypt.hash(this.password, saltRounds)
+
+        await insert_record(table, {
             username: this.username,
-            password: this.password,
+            password: hashedPassword,
             deleted: this.deleted ? this.deleted : 0,
             created_at: this.created_at ? this.created_at : now()
         })
+
+        }else
+        {
+            throw new Error("Password has to be string!");
+        }
     }
 }
