@@ -9,13 +9,9 @@ module.exports = (app :Express) => {
         await controller.validate_and_register_user(req,res);
     });
     
-    app.post('/login', (req: Request, res: Response) => {
-      res.send(
-        {
-        username: `${req.body.username}`,
-        password: `${req.body.password}`,
-        }
-        );
+    app.post('/login', async (req: Request, res: Response) => {
+            const controller = new UserController();
+            await controller.log_in(req,res);
     });
 }
 

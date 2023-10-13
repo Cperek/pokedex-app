@@ -12,8 +12,3 @@ export default{
     },
     }
 }
-
-// UserAuthentication.register({
-//     email: 'test@example.com',
-//     password '1234'
-// })

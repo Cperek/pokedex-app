@@ -1,7 +1,6 @@
 
 <template>
   <v-layout column flex class="justify-center pb-4">
-      <v-flex sm-6 offset-sm-3>
         <div class="Register" > 
         <v-card
           class="mx-auto pa-12 pb-8"
@@ -22,6 +21,8 @@
           density="compact"
           hint="Set your username to log in with"
           prepend-inner-icon="mdi-account"
+          :loading="loading"
+          :disabled="loading"
           >
           </v-text-field>
 
@@ -36,6 +37,8 @@
           :type="visible_pass ? 'text' : 'password'"
           density="compact"
           variant="underlined"
+          :loading="loading"
+          :disabled="loading"
           @click:append-inner="visible_pass = !visible_pass"
           ></v-text-field>
           
@@ -49,12 +52,14 @@
           :type="visible_repass ? 'text' : 'password'"
           density="compact"
           variant="underlined"
+          :loading="loading"
+          :disabled="loading"
           @click:append-inner="visible_repass = !visible_repass"
           ></v-text-field>
 
           <br>
 
-          <v-btn block class="mb-8" color="amber-accent-3" size="large" variant="outlined" @click="register">register</v-btn>
+          <v-btn :loading="loading" block class="mb-8" color="amber-accent-3" size="large" variant="outlined" @click="register">register</v-btn>
         
           <v-card-text class="text-center">
             <router-link to="/login">Log in <v-icon icon="mdi-chevron-right"></v-icon></router-link>        
@@ -62,7 +67,6 @@
           
         </v-card>
       </div>
-      </v-flex>
 
       <transition>
       <div v-if="alertShow">
@@ -97,12 +101,13 @@ export default{
       alertText: '',
       alertShow: false,
       alertType: true,
-      Interval: 0
+      Interval: 0,
+      loading: false,
     }
   },
   methods: {
       async register (){
-       
+        this.loading = true;
         try{
           const response = await UserAuthentication.methods.register({
           username: this.username,
@@ -119,6 +124,7 @@ export default{
             this.alertText = error.response?.data.error;
             this.alertType = false;
             this.alertShow = true;
+            this.loading = false;
           }
         }
         finally

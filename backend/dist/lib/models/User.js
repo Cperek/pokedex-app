@@ -32,6 +32,13 @@ class User {
                 throw new Error("Password has to be string!");
             }
         });
+        this.unhash = (Text, Hash) => __awaiter(this, void 0, void 0, function* () {
+            let result = false;
+            yield bcrypt_1.default.compare(Text, Hash).then(function (response) {
+                result = response;
+            });
+            return result;
+        });
     }
 }
 exports.default = User;

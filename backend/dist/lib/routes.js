@@ -18,10 +18,8 @@ module.exports = (app) => {
         const controller = new UserController_1.default();
         yield controller.validate_and_register_user(req, res);
     }));
-    app.post('/login', (req, res) => {
-        res.send({
-            username: `${req.body.username}`,
-            password: `${req.body.password}`,
-        });
-    });
+    app.post('/login', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        const controller = new UserController_1.default();
+        yield controller.log_in(req, res);
+    }));
 };

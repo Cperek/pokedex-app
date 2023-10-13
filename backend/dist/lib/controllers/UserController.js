@@ -19,6 +19,43 @@ class UserController {
     constructor() {
         this.user = new User_1.default();
     }
+    log_in(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const userData = req.body;
+            // Validate user data
+            if (!userData.username || !userData.password) {
+                res.status(403).send({
+                    error: "All input fields are requiered!"
+                });
+                return;
+            }
+            var User = yield (0, database_1.get_record)('users', //table
+            { username: userData.username, deleted: 0 }, //where
+            { _id: 1, username: 1, password: 1 }) //select
+                .then();
+            {
+                if (User == null) {
+                    res.status(403).send({
+                        error: "The account does not exist!"
+                    });
+                    return;
+                }
+                else {
+                    yield this.user.unhash(userData.password, User.password).then((result) => {
+                        if (result) {
+                            User.password = this.user.password;
+                            res.send(JSON.stringify(User));
+                        }
+                        else {
+                            res.status(403).send({
+                                error: "The password doesn't match"
+                            });
+                        }
+                    });
+                }
+            }
+        });
+    }
     validate_and_register_user(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const userData = req.body;

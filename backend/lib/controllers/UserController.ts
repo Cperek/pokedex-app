@@ -11,6 +11,53 @@ export default class UserController {
         this.user = new User();
     }
 
+    async log_in(req: Request, res: Response)
+    {
+        const userData: { 
+            username: string;
+            password: string;
+       } = req.body;
+
+            // Validate user data
+        if (!userData.username || !userData.password) {
+            res.status(403).send({
+                error: "All input fields are requiered!"
+            });
+            return;
+        }
+
+        var User = await get_record(
+            'users', //table
+            {username:userData.username, deleted: 0 }, //where
+            {_id: 1, username: 1, password: 1}) //select
+            .then()
+            {
+                if(User == null)
+                {
+                    res.status(403).send({
+                        error: "The account does not exist!"
+                    });
+                    return;
+                }else
+                {
+                await this.user.unhash(userData.password,User.password).then((result) =>
+                {
+                    if(result)
+                    {
+                        User.password = this.user.password;
+                        res.send(JSON.stringify(User)) ;
+                    }else
+                    {
+                        res.status(403).send({
+                            error: "The password doesn't match"
+                        });  
+                    }
+                })
+                }
+            }
+
+    }
+
     async validate_and_register_user(req: Request, res: Response) {
 
         const userData: { 

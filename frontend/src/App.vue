@@ -29,5 +29,14 @@ import Navbar from '@/components/Navbar.vue'
 .v-container
 {
   padding: 0!important;
+  min-height: 100%;
+}
+.container
+{
+  height: 84dvh;
+}
+.v-layout
+{
+  height: 100%;
 }
 </style>

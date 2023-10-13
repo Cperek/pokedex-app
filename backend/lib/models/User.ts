@@ -39,4 +39,14 @@ export default class User {
             throw new Error("Password has to be string!");
         }
     }
+    
+    unhash = async (Text: string, Hash: string): Promise<boolean> =>
+    {
+        let result = false;
+        await bcrypt.compare(Text, Hash).then(function(response) {
+          result = response;
+        });
+        return result;
+    }
+
 }
