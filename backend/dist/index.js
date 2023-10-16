@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.database = exports.uri = void 0;
+exports.jwdToken = exports.database = exports.uri = void 0;
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const body_parser_1 = __importDefault(require("body-parser"));
@@ -16,6 +16,8 @@ exports.uri = uri;
 const database = config.DB_NAME ? config.DB_NAME : '';
 exports.database = database;
 const port = config.PORT;
+const jwdToken = config.JWT_TOKEN ? config.JWT_TOKEN : '';
+exports.jwdToken = jwdToken;
 //declare express app
 const app = (0, express_1.default)();
 app.use((0, morgan_1.default)('combined'));

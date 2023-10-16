@@ -16,6 +16,7 @@ export default class User {
     public created_at?: number;
     public updated_at?: number;
     public deleted_at?: number; 
+    public token?: string;
     
 
     constructor() {}

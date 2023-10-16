@@ -2,13 +2,23 @@ import User from "../models/User";
 import { Request, Response } from 'express';
 import { get_record } from '../database';
 import Joi, { array, object } from 'joi';
+import {jwdToken} from '../../index';
 import { error } from "console";
+import jwt from 'jsonwebtoken'
 
 export default class UserController {
     private user: User;
 
     constructor() {
         this.user = new User();
+    }
+
+    SignToken(user: object): string
+    {
+        const ONE_WEEK = 60 * 60 * 24 * 7;
+        return jwt.sign(user,jwdToken, {
+            expiresIn: ONE_WEEK
+        });
     }
 
     async log_in(req: Request, res: Response)
@@ -45,6 +55,7 @@ export default class UserController {
                     if(result)
                     {
                         User.password = this.user.password;
+                        User.token = this.SignToken(User)
                         res.send(JSON.stringify(User)) ;
                     }else
                     {
@@ -57,6 +68,7 @@ export default class UserController {
             }
 
     }
+    
 
     async validate_and_register_user(req: Request, res: Response) {
 
@@ -153,7 +165,8 @@ export default class UserController {
                 try{
                     await this.user.create().then()
                     {
-                        res.send(JSON.stringify(this.user)) 
+                        this.user.token = this.SignToken(userData);
+                        res.send(JSON.stringify(this.user));
                     }
 
                 } catch(err)

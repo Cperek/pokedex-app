@@ -11,10 +11,11 @@ const config = process.env;
 const uri = config.MONGO_DB_URI ? config.MONGO_DB_URI : '';
 const database = config.DB_NAME ? config.DB_NAME : '';
 const port = config.PORT;
+const jwdToken = config.JWT_TOKEN ? config.JWT_TOKEN : ''
 
 
 
-export { uri, database };
+export { uri, database, jwdToken };
 
 
 

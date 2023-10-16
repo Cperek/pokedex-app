@@ -15,9 +15,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const User_1 = __importDefault(require("../models/User"));
 const database_1 = require("../database");
 const joi_1 = __importDefault(require("joi"));
+const index_1 = require("../../index");
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 class UserController {
     constructor() {
         this.user = new User_1.default();
+    }
+    SignToken(user) {
+        const ONE_WEEK = 60 * 60 * 24 * 7;
+        return jsonwebtoken_1.default.sign(user, index_1.jwdToken, {
+            expiresIn: ONE_WEEK
+        });
     }
     log_in(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -44,6 +52,7 @@ class UserController {
                     yield this.user.unhash(userData.password, User.password).then((result) => {
                         if (result) {
                             User.password = this.user.password;
+                            User.token = this.SignToken(User);
                             res.send(JSON.stringify(User));
                         }
                         else {
@@ -130,6 +139,7 @@ class UserController {
                 try {
                     yield this.user.create().then();
                     {
+                        this.user.token = this.SignToken(userData);
                         res.send(JSON.stringify(this.user));
                     }
                 }
