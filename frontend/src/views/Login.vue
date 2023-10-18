@@ -74,8 +74,14 @@
 
 <script lang="ts">
 import UserAuthentication from '@/services/UserAuthentication'
+import { useStore } from '@/store/store';
 import { AxiosError } from 'axios'
+
 export default{
+  setup () {
+    const store = useStore();
+    return {store};
+  },
   data() {
     return {
       username: '',
@@ -95,10 +101,13 @@ export default{
           const response = await UserAuthentication.methods.login({
           username: this.username,
           password: this.password,
-          })
+          })    
+
+          this.store.token = response.data.token;
           this.alertText = "Logged in successfully"
           this.alertType = true;
-          this.alertShow = true;
+          this.alertShow = true;         
+
         }catch(error)
         {
           if (error instanceof AxiosError) {
