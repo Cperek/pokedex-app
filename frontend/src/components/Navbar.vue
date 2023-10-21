@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { store } from '@/store/store';
 import IconLogo from './icons/IconLogo.vue'
+
 </script>
 
 <template>
@@ -19,9 +21,14 @@ import IconLogo from './icons/IconLogo.vue'
 
       <v-spacer></v-spacer>
 
-      <v-btn icon>
+      <v-btn v-if="store.state.userLoggedIn" icon>
         <v-icon>mdi-export</v-icon>
       </v-btn>
+
+      <v-btn to="/login" v-if="!store.state.userLoggedIn" size="large">
+        Sign In
+      </v-btn>
+      
     </v-toolbar>
     </div>
 </template>

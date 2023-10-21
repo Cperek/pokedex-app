@@ -103,7 +103,12 @@ export default{
           password: this.password,
           })    
 
-          this.store.token = response.data.token;
+          this.store.dispatch('setToken',response.data.token);
+          this.store.dispatch('setUser',
+          {
+            'username' : response.data.username,
+            'id': response.data._id
+          });
           this.alertText = "Logged in successfully"
           this.alertType = true;
           this.alertShow = true;         
