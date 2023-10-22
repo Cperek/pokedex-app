@@ -1,4 +1,4 @@
-import Api from '@/services/Api'
+import {Api} from '@/services/Api'
 
 export default{
     methods: {
@@ -9,6 +9,6 @@ export default{
     login (userdata: object)
     {
         return Api().post('login',userdata);
-    },
+    },   
     }
 }
