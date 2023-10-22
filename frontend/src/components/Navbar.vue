@@ -47,18 +47,36 @@ export default
 
       <v-spacer></v-spacer>
 
-      <span
-      id="username"
-      v-if="store.state.userLoggedIn" 
-      v-text="store.state.user.username"
-      ></span>
-      <v-btn @click="logout" v-if="store.state.userLoggedIn" icon>
-        <v-icon>mdi-export</v-icon>
-      </v-btn>
 
-      <v-btn to="/login" v-if="!store.state.userLoggedIn" size="large">
-        Sign In
-      </v-btn>
+      <v-chip
+      class="ma-2"
+      color="light-blue-darken-3"
+      variant="outlined"
+      v-if="store.state.userLoggedIn" 
+      >
+      {{ store.state.user.username }}
+      <v-icon end icon="mdi-account-outline"></v-icon>
+      <v-menu activator="parent">
+        <v-list>
+          <v-list-item @click="logout">
+            <v-list-item-title>        
+              Log out
+              <v-icon end >mdi-export</v-icon>
+            </v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </v-chip>
+
+      <v-chip
+      class="ma-2"
+      to="/login"
+      color="light-blue-darken-3"
+      variant="outlined"
+      v-if="!store.state.userLoggedIn" 
+      >
+      Sign in
+      </v-chip>
       
     </v-toolbar>
     </div>
@@ -70,10 +88,9 @@ export default
         margin-left: 1rem;
     }
 
-    #username
+    .v-chip.v-chip--size-default
     {
-      color: #3D7DCA;
-      font-size: 18px;
+      padding: 0 25px;
     }
 
 </style>
