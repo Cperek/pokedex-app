@@ -11,3 +11,7 @@ export const pokeApi = () => {
         baseURL: `https://pokeapi.co/api/v2/`
     })
 }
+
+export const customApi = () => {
+    return axios.create({})
+}

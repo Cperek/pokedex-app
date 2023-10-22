@@ -1,4 +1,4 @@
-import {Api,pokeApi} from '@/services/Api'
+import {Api, pokeApi, customApi} from '@/services/Api'
 
 export default{
     methods: {
@@ -6,5 +6,9 @@ export default{
     {
         return pokeApi().get(`pokemon?limit=${limit}&offset=${offset}`);
     },   
+    getCustomRequest(url: string)
+    {
+        return customApi().get(url); 
+    }
     }
 }
