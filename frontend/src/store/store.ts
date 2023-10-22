@@ -1,42 +1,44 @@
 // @ts-ignore
 import { createStore, useStore as baseUseStore, Store } from 'vuex'
+import createPersistedState from "vuex-plugin-persistedstate";
 import { type InjectionKey } from 'vue'
 
 
 export interface State {
-    token?: string,
-    user?: object,
-    userLoggedIn?: boolean,
+    token: string | null,
+    user: object | null,
+    userLoggedIn: boolean,
 }
 
 export const key: InjectionKey<Store<State>> = Symbol()
 
 export const store = createStore<State>({
   strict: true,
+  plugins: [createPersistedState()],
   state: {
     token: null,
     user: null,
     userLoggedIn: false,
   },
   mutations: {
-    setToken(state: {userLoggedIn: boolean; token: any;}, token: string)
+    setToken(state: {userLoggedIn: boolean; token: string | null;}, token: string | null)
     {
         state.token = token;
         state.userLoggedIn = token ? true : false; 
     },
-    setUser(state: { user: object; }, user: object)
+    setUser(state: { user: object | null; }, user: object | null)
     {
         state.user = user;
     }
   },
   actions: {
-    setToken({commit}: any, token: string)
+    async setToken({commit}: any, token: string | null)
     {
-        commit('setToken',token);
+      return await commit('setToken',token);
     },
-    setUser({commit}: any, user: object)
+    async setUser({commit}: any, user: object | null)
     {
-        commit('setUser',user);
+       return await commit('setUser',user);
     }
   }
 })

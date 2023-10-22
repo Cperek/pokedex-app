@@ -82,6 +82,14 @@ export default{
     const store = useStore();
     return {store};
   },
+  async mounted() {
+    if(this.store.state.userLoggedIn && this.$route.name !== 'home')
+    {
+      await this.$router.push({
+            name: 'home'
+      });  
+    }
+  },
   data() {
     return {
       username: '',
@@ -111,7 +119,7 @@ export default{
           });
           this.alertText = "Logged in successfully"
           this.alertType = true;
-          this.alertShow = true;         
+          this.alertShow = true;      
 
         }catch(error)
         {
@@ -124,13 +132,28 @@ export default{
         }
         finally
         {
-          clearInterval(this.Interval);
-          this.Interval = setInterval(() => {
-          this.alertShow = false;
-          }, 55000);
+          clearTimeout(this.Interval);
+          if(this.alertType == true && this.$route.name !== 'home')
+          {
+
+            this.Interval = setTimeout(async () => {
+              await this.$router.push({
+              name: 'home'
+              });   
+          }, 1000);
+
+          } else
+          {
+
+            this.Interval = setTimeout(() => {
+            this.alertShow = false;
+            }, 5500);
+
+          }
+
         }
     }
-  }
+  },
 }
 </script>
 

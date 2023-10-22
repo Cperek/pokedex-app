@@ -90,7 +90,16 @@
 <script lang="ts">
 import UserAuthentication from '@/services/UserAuthentication';
 import { AxiosError } from 'axios';
+import { store } from '@/store/store';
 export default{
+  async mounted() {
+    if(store.state.userLoggedIn && this.$route.name !== 'home')
+    {
+      await this.$router.push({
+            name: 'home'
+      });  
+    }
+  },
   data() {
     return {
       username: '',
@@ -129,10 +138,24 @@ export default{
         }
         finally
         {
-          clearInterval(this.Interval);
-          this.Interval = setInterval(() => {
-          this.alertShow = false;
-          }, 5000);
+          clearTimeout(this.Interval);
+          if(this.alertType == true && this.$route.name !== 'login')
+          {
+
+            this.Interval = setTimeout(async () => {
+              await this.$router.push({
+              name: 'login'
+            });   
+          }, 1000);
+
+          } else
+          {
+
+            this.Interval = setTimeout(() => {
+            this.alertShow = false;
+            }, 5500);
+
+          }
         }
     }
   }

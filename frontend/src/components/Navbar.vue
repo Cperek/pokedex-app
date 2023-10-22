@@ -1,6 +1,32 @@
-<script setup lang="ts">
+<script lang="ts">
 import { store } from '@/store/store';
 import IconLogo from './icons/IconLogo.vue'
+export default
+{
+  data() {
+    return {
+      store: store
+    }
+    },
+    components:{
+      IconLogo
+    },
+    methods: {
+      logout() {
+      if(this.$route.name !== 'login')
+      {
+        store.dispatch('setToken',null).then(() => {
+          store.dispatch('setUser', null).then(() => {
+              this.$router.push({
+              name: 'login'
+            });  
+          });
+        });
+
+      }
+    },
+  }
+}
 
 </script>
 
@@ -21,7 +47,12 @@ import IconLogo from './icons/IconLogo.vue'
 
       <v-spacer></v-spacer>
 
-      <v-btn v-if="store.state.userLoggedIn" icon>
+      <span
+      id="username"
+      v-if="store.state.userLoggedIn" 
+      v-text="store.state.user.username"
+      ></span>
+      <v-btn @click="logout" v-if="store.state.userLoggedIn" icon>
         <v-icon>mdi-export</v-icon>
       </v-btn>
 
@@ -38,4 +69,11 @@ import IconLogo from './icons/IconLogo.vue'
         font-size:155px;
         margin-left: 1rem;
     }
+
+    #username
+    {
+      color: #3D7DCA;
+      font-size: 18px;
+    }
+
 </style>
