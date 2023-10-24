@@ -2,6 +2,7 @@
 import { store } from '@/store/store';
 import Pokedex from '@/services/Pokedex';
 
+
 interface Pokemon {
   name: string;
   url: string;
@@ -28,7 +29,8 @@ interface Pokemon {
         }
       }
 
-    }
+    },
+    types: { type: { name: string } }[];
   };
 }
 
@@ -93,6 +95,21 @@ async mounted() {
                     <v-card-subtitle v-if="pokemon.details" style="color: white;">
                       #{{ String(pokemon.details.id).padStart(5, '0') }}
                     </v-card-subtitle>
+                    
+                    <v-card-subtitle>
+                      <v-chip-group>
+                          <v-chip
+                            variant="elevated"
+                            v-if="pokemon.details"
+                            v-for="type in pokemon.details.types"  
+                            :class="'custom-' + type.type.name"
+                            :key="type.type.name"
+                          >
+                            {{ type.type.name }}
+                          </v-chip>
+                    </v-chip-group>
+                  </v-card-subtitle>
+                    
                 </div>
 
                 <v-avatar
@@ -112,6 +129,47 @@ async mounted() {
 </template>
 
 <style scoped>
+
+.custom-poison {
+    background-color: purple;
+    color: white;
+  }
+  .custom-grass {
+    background-color: rgba(0, 128, 0);
+    color: white;
+  }
+
+  .custom-fire {
+    background-color: rgb(255, 102, 0);
+    color: white;
+  }
+
+  .custom-water{
+    opacity: 100;
+    background-color: rgb(0, 110, 255);
+    color: white;
+  }
+
+
+  .custom-ground{
+    color: white;
+    background-color: rgb(175, 109, 47);
+  }
+
+
+  .custom-flying{
+    color: white;
+    background-color: rgb(135, 198, 235);
+  }
+
+
+  .custom-electric{
+    color: white;
+    background-color: rgb(255, 230, 0);
+  }
+
+  
+  
 .v-card::after {
     content: '';
     position: absolute;
