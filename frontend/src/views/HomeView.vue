@@ -9,8 +9,13 @@ data() {
   return {
     pokedexList: [] as Pokemon[],
     next_url: '' as string,
+    prev_url: '' as string,
     root: null as null | HTMLElement,
-    qm: image
+    qm: image,
+    pages_to_show: 6,
+    page: 1,
+    rows_per_page: 10,
+    count: 0
   }
 },
 methods: {
@@ -19,6 +24,46 @@ methods: {
     const response = await Pokedex.methods.getCustomRequest(this.next_url);
     this.pokedexList = response.data.results;
     this.next_url = response.data.next;
+    this.prev_url = response.data.previous;
+    this.count = response.data.count;
+    for(const key in this.pokedexList)
+    {
+      let value = this.pokedexList[key];
+      value.details = (await Pokedex.methods.getCustomRequest(value.url)).data;
+    }
+  } catch (error) {
+    console.log(error);
+  } 
+  },
+  async prev(){
+    try {
+    const response = await Pokedex.methods.getCustomRequest(this.prev_url);
+    this.pokedexList = response.data.results;
+    this.next_url = response.data.next;
+    this.prev_url = response.data.previous;
+    this.count = response.data.count;
+    for(const key in this.pokedexList)
+    {
+      let value = this.pokedexList[key];
+      value.details = (await Pokedex.methods.getCustomRequest(value.url)).data;
+    }
+  } catch (error) {
+    console.log(error);
+  } 
+  },
+  async GetPage(newpage = 0)
+  {
+    if(newpage)
+    {
+      this.page = newpage;
+    }
+    let offset = (this.page * this.rows_per_page) - this.rows_per_page;
+    try {
+    const response = await Pokedex.methods.getPokedexList(this.rows_per_page,offset);
+    this.pokedexList = response.data.results;
+    this.next_url = response.data.next;
+    this.prev_url = response.data.previous;
+    this.count = response.data.count;
     for(const key in this.pokedexList)
     {
       let value = this.pokedexList[key];
@@ -30,27 +75,30 @@ methods: {
   }
 },
 async mounted() {
-  try {
-    const response = await Pokedex.methods.getPokedexList(10,0);
-    this.pokedexList = response.data.results;
-    this.next_url = response.data.next;
-    for(const key in this.pokedexList)
-    {
-      let value = this.pokedexList[key];
-      value.details = (await Pokedex.methods.getCustomRequest(value.url)).data;
-    }
-  } catch (error) {
-    console.log(error);
-  } 
+  this.GetPage();
 }
 }
 </script>
 
 <template>
   <main>
+
+    <v-btn @click="prev">
+      Back
+    </v-btn>
+    <v-btn v-for="n in pages_to_show" 
+           :key="n"
+           @click="GetPage(page + n - 2)"
+    >
+      {{ page + n - 2}}
+    </v-btn>
+    <v-btn @click="GetPage(Math.ceil(count / rows_per_page))">
+      {{ Math.ceil(count / rows_per_page) }}
+    </v-btn>
     <v-btn @click="next">
       Next
     </v-btn>
+
     <v-list>
       <v-list-item v-for="pokemon in pokedexList">
           <v-list-item-title>        
