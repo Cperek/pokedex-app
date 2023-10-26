@@ -1,37 +1,7 @@
 <script lang="ts">
 import { store } from '@/store/store';
-import Pokedex from '@/services/Pokedex';
+import Pokedex,{type Pokemon} from '@/services/Pokedex';
 import image from "../assets/question_mark.png"
-interface Pokemon {
-  name: string;
-  url: string;
-  details?: {
-    id: number,
-    sprites: {
-      back_default : string,
-      front_default : string
-      other: {
-        "official-artwork":
-        {
-          front_default : string
-        }
-      },
-      versions:{
-         "generation-v": {
-          "black-white": 
-          {
-              "animated": {
-                  "front_default": string
-              },
-              "front_default": string,
-          }
-        }
-      }
-
-    },
-    types: { type: { name: string } }[];
-  };
-}
 
 export default
 {
@@ -101,7 +71,7 @@ async mounted() {
                             variant="elevated"
                             v-if="pokemon.details"
                             v-for="type in pokemon.details.types"  
-                            :class="'custom-' + type.type.name"
+                            :class="'custom-' + type.type.name + ' type-chips'"
                             :key="type.type.name"
                           >
                             {{ type.type.name }}
@@ -145,100 +115,6 @@ async mounted() {
 </template>
 
 <style scoped>
-
-.custom-poison {
-    background-color: #A33EA1;
-    color: white;
-  }
-  .custom-grass {
-    background-color: #7AC74C;
-    color: white;
-  }
-
-  .custom-fire {
-    background-color: #EE8130;
-    color: white;
-  }
-
-  .custom-water{
-    opacity: 100;
-    background-color: #6390F0;
-    color: white;
-  }
-
-  
-  .custom-bug {
-    background-color: #A6B91A;
-    color: white;
-  }
-
-
-  .custom-ground{
-    color: white;
-    background-color: #E2BF65;
-  }
-
-  
-  .custom-normal{
-    color: white;
-    background-color: #A8A77A;
-  }
-
-  .custom-flying{
-    color: white;
-    background-color: #A98FF3;
-  }
-
-
-  .custom-electric{
-    color: white;
-    background-color: #F7D02C;
-  }
-
-
-  .custom-fairy{
-    color: white;
-    background-color: #D685AD;
-  }
-
-  .custom-fighting{
-    color: white;
-    background-color: #C22E28;
-  }
-  
-  .custom-psychic{
-    color: white;
-    background-color: #F95587;
-  }
-  .custom-rock{
-    color: white;
-    background-color: #B6A136;
-  }
-
-  .custom-ice{
-    color: white;
-    background-color: #96D9D6;
-  }
-
-  .custom-dragon{
-    color: white;
-    background-color: #6F35FC;
-  }
-
-  .custom-dark{
-    color: white;
-    background-color: #705746;
-  }
-
-  .custom-ghost{
-    color: white;
-    background-color: #735797;
-  }
-
-  .custom-steel{
-    color: white;
-    background-color: #B7B7CE;
-  }
 .v-card::after {
     content: '';
     position: absolute;

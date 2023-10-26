@@ -173,25 +173,4 @@ export default{
   margin-bottom: 2rem!important;
 }
 
-.alert_left
-{
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  max-width: 30%;
-}
-
-.v-leave-active {
-  transition: opacity 2s ease-out;
-}
-
-.v-enter-active {
-  transition: opacity 0.5s ease-in;
-}
-
-.v-enter-from,
-.v-leave-to {
-  opacity: 0;
-}
-
 </style>

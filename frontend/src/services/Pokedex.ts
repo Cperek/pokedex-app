@@ -12,3 +12,34 @@ export default{
     }
     }
 }
+
+export interface Pokemon {
+    name: string;
+    url: string;
+    details?: {
+      id: number,
+      sprites: {
+        back_default : string,
+        front_default : string
+        other: {
+          "official-artwork":
+          {
+            front_default : string
+          }
+        },
+        versions:{
+           "generation-v": {
+            "black-white": 
+            {
+                "animated": {
+                    "front_default": string
+                },
+                "front_default": string,
+            }
+          }
+        }
+  
+      },
+      types: { type: { name: string } }[];
+    };
+  }
