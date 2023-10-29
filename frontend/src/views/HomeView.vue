@@ -12,45 +12,13 @@ data() {
     prev_url: '' as string,
     root: null as null | HTMLElement,
     qm: image,
-    pages_to_show: 6,
+    pages_to_show: 10,
     page: 1,
     rows_per_page: 10,
     count: 0
   }
 },
 methods: {
-  async next(){
-    try {
-    const response = await Pokedex.methods.getCustomRequest(this.next_url);
-    this.pokedexList = response.data.results;
-    this.next_url = response.data.next;
-    this.prev_url = response.data.previous;
-    this.count = response.data.count;
-    for(const key in this.pokedexList)
-    {
-      let value = this.pokedexList[key];
-      value.details = (await Pokedex.methods.getCustomRequest(value.url)).data;
-    }
-  } catch (error) {
-    console.log(error);
-  } 
-  },
-  async prev(){
-    try {
-    const response = await Pokedex.methods.getCustomRequest(this.prev_url);
-    this.pokedexList = response.data.results;
-    this.next_url = response.data.next;
-    this.prev_url = response.data.previous;
-    this.count = response.data.count;
-    for(const key in this.pokedexList)
-    {
-      let value = this.pokedexList[key];
-      value.details = (await Pokedex.methods.getCustomRequest(value.url)).data;
-    }
-  } catch (error) {
-    console.log(error);
-  } 
-  },
   async GetPage(newpage = 0)
   {
     if(newpage)
@@ -76,28 +44,18 @@ methods: {
 },
 async mounted() {
   this.GetPage();
-}
+},
 }
 </script>
 
 <template>
   <main>
-
-    <v-btn @click="prev">
-      Back
-    </v-btn>
-    <v-btn v-for="n in pages_to_show" 
-           :key="n"
-           @click="GetPage(page + n - 2)"
-    >
-      {{ page + n - 2}}
-    </v-btn>
-    <v-btn @click="GetPage(Math.ceil(count / rows_per_page))">
-      {{ Math.ceil(count / rows_per_page) }}
-    </v-btn>
-    <v-btn @click="next">
-      Next
-    </v-btn>
+    <v-pagination
+      v-model="page"
+      :length="Math.ceil(count / rows_per_page)"
+      :total-visible="pages_to_show"
+      @update:model-value="GetPage(page)"
+    ></v-pagination>
 
     <v-list>
       <v-list-item v-for="pokemon in pokedexList">
