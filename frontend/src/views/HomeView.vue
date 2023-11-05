@@ -117,6 +117,13 @@ async mounted() {
           </v-list-item-title>
       </v-list-item>
     </v-list>
+    <v-pagination
+      v-model="page"
+       id="bottom-pagination"
+      :length="Math.ceil(count / rows_per_page)"
+      :total-visible="pages_to_show"
+      @update:model-value="GetPage(page)"
+    ></v-pagination>
   </main>
 </template>
 
@@ -145,5 +152,9 @@ background-color: #424040 ;
   color: white;
   font-weight: bold;
   font-size: 20px!important;
+}
+#bottom-pagination
+{
+  color: white;
 }
 </style>
