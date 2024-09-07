@@ -39,30 +39,22 @@ class UserController {
             }
             var User = yield (0, database_1.get_record)('users', //table
             { username: userData.username, deleted: 0 }, //where
-            { _id: 1, username: 1, password: 1 }) //select
-                .then();
-            {
-                if (User == null) {
-                    res.status(403).send({
-                        error: "The account does not exist!"
-                    });
-                    return;
-                }
-                else {
-                    yield this.user.unhash(userData.password, User.password).then((result) => {
-                        if (result) {
-                            User.password = this.user.password;
-                            User.token = this.SignToken(User);
-                            res.send(JSON.stringify(User));
-                        }
-                        else {
-                            res.status(403).send({
-                                error: "The password doesn't match"
-                            });
-                        }
-                    });
-                }
+            { _id: 1, username: 1, password: 1 }); //select
+            if (User == null) {
+                res.status(403).send({
+                    error: "The account does not exist!"
+                });
+                return;
             }
+            const result = yield this.user.unhash(userData.password, User.password);
+            if (!result) {
+                res.status(403).send({
+                    error: "The password doesn't match"
+                });
+            }
+            User.password = this.user.password;
+            User.token = this.SignToken(User);
+            res.send(JSON.stringify(User));
         });
     }
     validate_and_register_user(req, res) {
@@ -124,30 +116,25 @@ class UserController {
             }
             const userExist = yield (0, database_1.get_record)('users', //table
             { username: userData.username, deleted: 0 }, //where
-            { _id: 0, username: 1 }) //select
-                .then();
-            {
-                if (userExist !== null) {
-                    res.status(403).send({
-                        error: "Account already exists!"
-                    });
-                    return;
-                }
-                //Setting data for User.ts
-                this.user.username = userData.username;
-                this.user.password = userData.password;
-                try {
-                    yield this.user.create().then();
-                    {
-                        this.user.token = this.SignToken(userData);
-                        res.send(JSON.stringify(this.user));
-                    }
-                }
-                catch (err) {
-                    res.status(500).send({
-                        error: "Database connection failed!"
-                    });
-                }
+            { _id: 0, username: 1 }); //select
+            if (userExist !== null) {
+                res.status(403).send({
+                    error: "Account already exists!"
+                });
+                return;
+            }
+            //Setting data for User.ts
+            this.user.username = userData.username;
+            this.user.password = userData.password;
+            try {
+                yield this.user.create();
+                this.user.token = this.SignToken(userData);
+                res.send(JSON.stringify(this.user));
+            }
+            catch (err) {
+                res.status(500).send({
+                    error: "Database connection failed!"
+                });
             }
         });
     }

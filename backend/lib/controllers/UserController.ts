@@ -13,8 +13,7 @@ export default class UserController {
         this.user = new User();
     }
 
-    SignToken(user: object): string
-    {
+    SignToken(user: object): string{
         const ONE_WEEK = 60 * 60 * 24 * 7;
         return jwt.sign(user,jwdToken, {
             expiresIn: ONE_WEEK
@@ -28,7 +27,7 @@ export default class UserController {
             password: string;
        } = req.body;
 
-            // Validate user data
+        // Validate user data
         if (!userData.username || !userData.password) {
             res.status(403).send({
                 error: "All input fields are requiered!"
@@ -40,33 +39,25 @@ export default class UserController {
             'users', //table
             {username:userData.username, deleted: 0 }, //where
             {_id: 1, username: 1, password: 1}) //select
-            .then()
-            {
-                if(User == null)
-                {
-                    res.status(403).send({
-                        error: "The account does not exist!"
-                    });
-                    return;
-                }else
-                {
-                await this.user.unhash(userData.password,User.password).then((result) =>
-                {
-                    if(result)
-                    {
-                        User.password = this.user.password;
-                        User.token = this.SignToken(User)
-                        res.send(JSON.stringify(User)) ;
-                    }else
-                    {
-                        res.status(403).send({
-                            error: "The password doesn't match"
-                        });  
-                    }
-                })
-                }
-            }
 
+        if(User == null){
+            res.status(403).send({
+                error: "The account does not exist!"
+            });
+            return;
+        }
+
+        const result = await this.user.unhash(userData.password,User.password);
+
+        if(!result){
+            res.status(403).send({
+                error: "The password doesn't match"
+            });
+        }
+
+        User.password = this.user.password;
+        User.token = this.SignToken(User)
+        res.send(JSON.stringify(User)); 
     }
     
 
@@ -130,8 +121,7 @@ export default class UserController {
         catch (err) { 
             
             let message = 'Unknown Error'
-            if (Joi.isError(err))
-            {
+            if (Joi.isError(err)){
                 console.log(err)
                 message = err.message
             } 
@@ -147,37 +137,29 @@ export default class UserController {
         const userExist = await get_record(
             'users', //table
             {username:userData.username, deleted: 0 }, //where
-            {_id: 0, username: 1}) //select
-            .then()
-            {
-                if(userExist !== null)
-                {
-                    res.status(403).send({
-                        error: "Account already exists!"
-                    });
-                    return;
-                }
+            {_id: 0, username: 1}); //select
 
-                //Setting data for User.ts
-                this.user.username = userData.username;
-                this.user.password = userData.password;
+        if(userExist !== null){
+            res.status(403).send({
+                error: "Account already exists!"
+            });
+            return;
+        }
 
-                try{
-                    await this.user.create().then()
-                    {
-                        this.user.token = this.SignToken(userData);
-                        res.send(JSON.stringify(this.user));
-                    }
+        //Setting data for User.ts
+        this.user.username = userData.username;
+        this.user.password = userData.password;
 
-                } catch(err)
-                {
-                    res.status(500).send({
-                        error: "Database connection failed!"
-                    });
-                }
-            }
-
- 
+        try{
+            await this.user.create()
+            this.user.token = this.SignToken(userData);
+            res.send(JSON.stringify(this.user));
+    
+        } catch(err){
+            res.status(500).send({
+                error: "Database connection failed!"
+            });
+        }
      
     }
 }

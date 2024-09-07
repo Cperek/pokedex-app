@@ -39,10 +39,8 @@ export async function get_record(table: string, where: object,select?: object): 
       }
     )
   } finally {
-    await mc.close().then()
-    {
-      return result;
-    } 
+    await mc.close();
+    return result;
   }
 }
 

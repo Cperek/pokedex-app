@@ -44,9 +44,7 @@ export default class User {
     unhash = async (Text: string, Hash: string): Promise<boolean> =>
     {
         let result = false;
-        await bcrypt.compare(Text, Hash).then(function(response) {
-          result = response;
-        });
+        result = await bcrypt.compare(Text, Hash);
         return result;
     }
 

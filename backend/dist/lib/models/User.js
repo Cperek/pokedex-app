@@ -34,9 +34,7 @@ class User {
         });
         this.unhash = (Text, Hash) => __awaiter(this, void 0, void 0, function* () {
             let result = false;
-            yield bcrypt_1.default.compare(Text, Hash).then(function (response) {
-                result = response;
-            });
+            result = yield bcrypt_1.default.compare(Text, Hash);
             return result;
         });
     }

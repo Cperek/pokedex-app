@@ -42,10 +42,8 @@ function get_record(table, where, select) {
             });
         }
         finally {
-            yield mc.close().then();
-            {
-                return result;
-            }
+            yield mc.close();
+            return result;
         }
     });
 }
