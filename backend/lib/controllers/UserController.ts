@@ -40,7 +40,7 @@ export default class UserController {
             {username:userData.username, deleted: 0 }, //where
             {_id: 1, username: 1, password: 1}) //select
 
-        if(User == null){
+        if(!User){
             res.status(403).send({
                 error: "The account does not exist!"
             });
@@ -48,11 +48,11 @@ export default class UserController {
         }
 
         const result = await this.user.unhash(userData.password,User.password);
-
         if(!result){
             res.status(403).send({
                 error: "The password doesn't match"
             });
+            return;
         }
 
         User.password = this.user.password;
